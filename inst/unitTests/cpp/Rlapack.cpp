@@ -19,6 +19,8 @@
 // You should have received a copy of the GNU General Public License
 // along with RcppArmadillo.  If not, see <http://www.gnu.org/licenses/>.
 
+#define ARMA_EXTRA_DEBUG
+
 #include <RcppArmadillo.h>
 
 using namespace Rcpp;
@@ -104,6 +106,19 @@ arma::cx_mat cx_solve_test(const int n)
 
     arma::cx_mat X1 = solve(A, B);
     arma::cx_mat X2 = solve(A, B, arma::solve_opts::fast);  // enable fast mode
+
+    // trigger solve_tridiag_refine
+
+    if (n > 3) 
+    {
+        arma::cx_mat A_tri = arma::zeros<arma::cx_mat>(n,n);
+
+        A_tri.diag() = arma::randu<arma::cx_mat>(n,1);
+        A_tri.diag(1) = arma::randu<arma::cx_mat>(n-1,1);
+        A_tri.diag(-1) = arma::randu<arma::cx_mat>(n-1,1);
+
+        arma::cx_vec x_tri = solve(A, b);
+    }
 
     // next for non-square matrices; to test solve_approx_svd
 

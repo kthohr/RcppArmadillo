@@ -111,13 +111,15 @@ arma::cx_mat cx_solve_test(const int n)
 
     if (n > 3) 
     {
-        arma::cx_mat A_tri = arma::zeros<arma::cx_mat>(n,n);
+        int n_tri_rows = 34;
+        arma::cx_mat A_tri = arma::zeros<arma::cx_mat>(n_tri_rows,n_tri_rows);
 
-        A_tri.diag() = arma::randu<arma::cx_mat>(n,1);
-        A_tri.diag(1) = arma::randu<arma::cx_mat>(n-1,1);
-        A_tri.diag(-1) = arma::randu<arma::cx_mat>(n-1,1);
+        A_tri.diag() = arma::randu<arma::cx_mat>(n_tri_rows,1);
+        A_tri.diag(1) = arma::randu<arma::cx_mat>(n_tri_rows-1,1);
+        A_tri.diag(-1) = arma::randu<arma::cx_mat>(n_tri_rows-1,1);
 
-        arma::cx_vec x_tri = solve(A, b);
+        arma::cx_vec b_tri = arma::randu<arma::cx_vec>(n_tri_rows);
+        arma::cx_vec x_tri = solve(A_tri, b_tri);
     }
 
     // next for non-square matrices; to test solve_approx_svd
